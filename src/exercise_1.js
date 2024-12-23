@@ -1,7 +1,7 @@
 /**
- * Write a function to check if a string is empty 
- * @param {String} text
- * @returns {Boolean}
+ * Checks if a string is empty
+ * @param {string} text
+ * @returns {boolean}
  * @example
  * isStringEmpty('abc'); => false
  * isStringEmpty(''); => true
@@ -9,42 +9,66 @@
  * isStringEmpty(); => throws error "text must be defined"
  */
 function isStringEmpty(text) {
-  // Your code here
+  if (text === undefined || text === null) {
+    throw new Error("text must be defined");
+  }
+  return text.trim().length === 0;
 }
 
+
 /**
- * Write a function to truncate text
- * @param {String} text 
- * @param {Number} numberOfCharacters
- * @returns {String} 
+ * Truncates the input string to a specified number of characters.
+ * @param {string} inputText - The input string to truncate.
+ * @param {number} numberOfCharacters - The number of characters to keep.
+ * @returns {string} - The truncated string.
+ * @throws {Error} - Throws an error if the inputText is empty or numberOfCharacters is not provided.
  * @example
  * truncateString('Hello World', 2); => 'He'
- * truncateString('Hello world'); => throws error "Please specify number of characters to extract"
- * truncateString(''); => throws error "text must have at least one character"
  */
-function truncateString(text, numberOfCharacters) {
-  // Your code here
+function truncateString(inputText, numberOfCharacters) {
+  if (typeof inputText !== 'string' || inputText.length === 0) {
+    throw new Error('Input text must have at least one character');
+  }
+
+  if (typeof numberOfCharacters !== 'number') {
+    throw new Error('Please specify number of characters to extract');
+  }
+
+  return inputText.substring(0, numberOfCharacters);
 }
 
+
 /**
- * Write a function to create social media post hash tag
- * @param {String} text 
- * @returns {String}
- * @example
- * createHashTag('Hello World'); => '#helloWorld'
- * createHashTag('i love javascript'); => '#iLoveJavascript'
- * createHashTag(''); => throws error "Text should have at least three characters"
- * createHashTag(); => throws error "Text should have at least three characters"
- * createHashTag('   '); => throws error "Text should have at least three characters"
+ * Creates a social media post hashtag from the given text.
+ * @param {String} text - The input text to convert into a hashtag.
+ * @returns {String} - The generated hashtag in camelCase format.
+ * @throws {Error} - Throws an error if the text has fewer than three characters or is invalid.
  */
 function createHashTag(text) {
-  // Your code here
+  // Validate input
+  if (typeof text !== "string" || text.trim().length < 3) {
+    throw new Error("Text should have at least three characters");
+  }
+
+  // Generate camelCase hashtag
+  return (
+    "#" +
+    text
+      .trim()
+      .toLowerCase()
+      .split(/\s+/)
+      .map((word, index) =>
+        index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)
+      )
+      .join("")
+  );
 }
+
 
 /**
  * Write a function to format phone number as '+998 99 777 66 55'
- * @param {Number} phoneNumber 
- * @returns {String}
+ * @param {number} phoneNumber
+ * @returns {string}
  * @throws {Error} 'Phone number must be either 9 or 12 characters long'
  * @example
  * formatPhoneNumber(998997776655); => '+998 99 777 66 55'
@@ -54,52 +78,97 @@ function createHashTag(text) {
  * formatPhoneNumber(); => throws error "Phone number must be either 9 or 12 characters long"
  */
 function formatPhoneNumber(phoneNumber) {
-  // Your code here
+  if (typeof phoneNumber !== "number" || phoneNumber === null || phoneNumber === undefined) {
+    throw new Error("Phone number must be either 9 or 12 characters long");
+  }
+
+  const phoneNumberString = String(phoneNumber);
+  const phoneNumberLength = phoneNumberString.length;
+
+  if (phoneNumberLength === 9) {
+    if (phoneNumberString[0] === '0') {
+      throw new Error("Phone number must be either 9 or 12 characters long");
+    }
+    return `+998 ${phoneNumberString.slice(0, 2)} ${phoneNumberString.slice(
+      2,
+      5
+    )} ${phoneNumberString.slice(5, 7)} ${phoneNumberString.slice(7)}`;
+  } else if (phoneNumberLength === 12) {
+    if (phoneNumberString[0] === '0') {
+      throw new Error("Phone number must be either 9 or 12 characters long");
+    }
+    return `+${phoneNumberString.slice(0, 3)} ${phoneNumberString.slice(
+      3,
+      5
+    )} ${phoneNumberString.slice(5, 8)} ${phoneNumberString.slice(
+      8,
+      10
+    )} ${phoneNumberString.slice(10)}`;
+  } else {
+    throw new Error("Phone number must be either 9 or 12 characters long");
+  }
 }
 
 /**
  * Write a function that transforms text to different cases
- * @param {String} text 
- * @param {'camel'|'kebab'|'snake'} caseName - 'camel', 'kebab', 'snake'
- * @returns {String}
+ * @param {string} inputText - The text to transform
+ * @param {'camel'|'kebab'|'snake'} caseType - The type of case to transform to
+ * @returns {string}
  * @example
  * changeTextCase('Hello World', 'camel'); => 'helloWorld'
  * changeTextCase('Hello World', 'kebab'); => 'hello-world'
  * changeTextCase('Hello World', 'snake'); => 'hello_world'
- * 
  */
-function changeTextCase(text, caseName) {
-  // Your code here
+function changeTextCase(inputText, caseType) {
+  const words = inputText.toLowerCase().split(" ");
+  if (caseType === "camel") {
+    return (
+      words[0] +
+      words
+        .slice(1)
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join("")
+    );
+  }
+  if (caseType === "kebab") {
+    return words.join("-");
+  }
+  if (caseType === "snake") {
+    return words.join("_");
+  }
+  throw new Error("Invalid case type");
 }
 
 /**
- * Write a function to replace a given word in the text with the replacement word
- * @param {String} text - Some text
- * @param {String} word - A word that needs to be replaced
- * @param {String} replacement - A new word that will replace 'word' argument in the 'text'
- * @returns {String}
+ * Replace a given word in the text with the replacement word
+ * @param {string} text - Some text
+ * @param {string} wordToReplace - A word that needs to be replaced
+ * @param {string} replacementWord - A new word that will replace 'wordToReplace' argument in the 'text'
+ * @returns {string}
  * @example
- * const bigText = 'Winnie-the-Pooh (also known as Edward Bear, Pooh Bear or simply Pooh) is a fictional anthropomorphic teddy bear created by English author A. A. Milne and English illustrator E. H. Shepard. Winnie-the-Pooh first appeared by name in a children's story commissioned by London's Evening News for Christmas Eve 1925. The character is inspired by a stuffed toy that Milne had bought for his son Christopher Robin in Harrods department store, and a bear they had viewed at London Zoo.';
- * const replacedWord = 'Pooh';
+ * const text = 'Winnie-the-Pooh is a fictional anthropomorphic teddy bear created by English author A. A. Milne and English illustrator E. H. Shepard.';
+ * const wordToReplace = 'Pooh';
  * const replacementWord = 'Puff'
- * replaceWordInText(bigText, replacedWord, replacementWord); =>
- * 'Winnie-the-Puff (also known as Edward Bear, Puff Bear or simply Puff) is a fictional anthropomorphic teddy bear created by English author A. A. Milne and English illustrator E. H. Shepard. Winnie-the-Puff first appeared by name in a children's story commissioned by London's Evening News for Christmas Eve 1925. The character is inspired by a stuffed toy that Milne had bought for his son Christopher Robin in Harrods department store, and a bear they had viewed at London Zoo.'
+ * replaceWordInText(text, wordToReplace, replacementWord); =>
+ * 'Winnie-the-Puff is a fictional anthropomorphic teddy bear created by English author A. A. Milne and English illustrator E. H. Shepard.'
  */
-function replaceWordInText(text, word, replacement) {
-  // Your code here
+function replaceWordInText(text, wordToReplace, replacementWord) {
+  return text.replace(new RegExp(wordToReplace, "g"), replacementWord);
 }
 
 /**
- * Write a function to extract price in number format from the text
- * @param {String} text 
- * @returns {Number}
+ * Extracts a price in number format from the given text
+ * @param {string} text the text to extract the price from
+ * @returns {number|string} the extracted price or 'No matching price was found'
  * @example
  * extractPriceFromText('Apple price in market is $2.32 per kg now'); => 2.32
  * extractPriceFromText('Apple price in market is $5 per kg now'); => 5
  * extractPriceFromText('There were no apples left in the shop'); => 'No matching price was found'
  */
 function extractPriceFromText(text) {
-  // Your code here
+  const priceRegex = /\$(\d+(?:\.\d+)?)/;
+  const match = text.match(priceRegex);
+  return match ? Number.parseFloat(match[1]) : "No matching price was found";
 }
 
 module.exports = {
@@ -109,5 +178,5 @@ module.exports = {
   isStringEmpty,
   replaceWordInText,
   truncateString,
-  formatPhoneNumber
-}
+  formatPhoneNumber,
+};
