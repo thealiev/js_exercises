@@ -22,22 +22,15 @@ const TIME_REGEX = /\b\d{2}:\d{2}\b/;
 
 /**
  * Finds a secret word in a string of uppercase letters.
- * The secret word is in lowercase and its letters are spread out in the string
- * @param {String} text
- * @returns {String}
+ * @param {string} text - The string to search.
+ * @returns {string} - The secret word.
  * @example
- * findSecretWord("UcUNFYGaFYFYGtNUH") => "cat"
- * findSecretWord("bEEFGBuFBRrHgUHlNFYaYr") => "burglar"
- * findSecretWord("YFemHUFBbezFBYzFBYLleGBYEFGBMENTment") => "embezzlement"
+ * findSecretWord("UcUNFYGaFYFYGtNUH") "cat"
+ * findSecretWord("bEEFGBuFBRrHgUHlNFYaYr") "burglar"
+ * findSecretWord("YFemHUFBbezFBYzFBYLleGBYEFGBMENTment") "embezzlement"
  * */
 function findSecretWord(text) {
-  let result = "";
-  for (let char of text) {
-    if (char === char.toLowerCase()) {
-      result += char;
-    }
-  }
-  return result;
+  return text.replace(/[A-Z]/g, "");
 }
 
 /**
@@ -47,50 +40,72 @@ function findSecretWord(text) {
  * {other person name} is {older than / younger than / the same age as} me.
  * */
 class Person {
-  constructor(name, age) {
-    this.#name = this.#validateName(name);
-    this.#age = this.#validateAge(age);
-  }
-
-  #validateName(name) {
-    if (typeof name !== "string" || name.trim() === "") {
-      throw new Error("Name must be a valid non-empty string.");
-    }
-    return name;
-  }
-
-  #validateAge(age) {
-    if (typeof age !== "number" || Number.isNaN(age)) {
-      throw new Error("Age must be a valid number.");
-    }
-    return age;
-  }
   /**
-   * Compares the age of another person and returns a sentence describing the comparison.
-   * @param {Person} other - The other person object to compare against.
-   * @returns {String} - A sentence indicating how the other person's age compares.
+   * @param {string} name
+   * @param {number} age
+   * */
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  /**
+   * Compares the age of another person with this person.
+   * @param {Person} other
+   * @returns {string}
    */
-  compareAge(other) {
-   
+
+  /**
+   * Compares the age of another person with this person.
+   * @param {Person} otherPerson
+   * @returns {string}
+   * @throws {Error} Throws an error if the 'otherPerson' object or its 'name' and 'age' properties are not defined.
+   * @example
+   * p1 = new Person("Samuel", 24)
+   * p2 = new Person("Joel", 36)
+   * p3 = new Person("Lily", 24)
+   * p1.compareAge(p2) => "Joel is older than me."
+   * p2.compareAge(p1) => "Samuel is younger than me."
+   * p1.compareAge(p3) => "Lily is the same age as me."
+   */
+  compareAge(otherPerson) {
+    if (
+      !otherPerson ||
+      typeof otherPerson.name !== "string" ||
+      typeof otherPerson.age !== "number"
+    ) {
+      throw new Error(
+        "Invalid 'otherPerson' object: must have 'name' (string) and 'age' (number) properties."
+      );
+    }
+
+    const comparison =
+      this.age < otherPerson.age
+        ? "older"
+        : this.age > otherPerson.age
+        ? "younger"
+        : "the same age as";
+    return `${otherPerson.name} is ${comparison} than me.`;
+  }
 }
 
 /**
- * Returns a function that returns the provided string.
- * @param {String} inputString
+ * Returns a function that returns the provided string `input`.
+ * @param {string} input
  * @returns {Function}
  * @example
- * const getString1 = redundant("apple");
- * getString1() ➞ "apple"
+ * const f1 = redundant("apple");
+ * f1(); // ➞ "apple"
  *
- * const getString2 = redundant("pear");
- * getString2() ➞ "pear"
+ * const f2 = redundant("pear");
+ * f2(); // ➞ "pear"
  *
- * const getString3 = redundant("");
- * getString3() ➞ ""
+ * const f3 = redundant("");
+ * f3(); // ➞ ""
  */
-function redundant(inputString) {
+function redundant(input) {
   return function () {
-    return inputString;
+    return input;
   };
 }
 

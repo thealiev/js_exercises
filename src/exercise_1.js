@@ -15,7 +15,6 @@ function isStringEmpty(text) {
   return text.trim().length === 0;
 }
 
-
 /**
  * Truncates the input string to a specified number of characters.
  * @param {string} inputText - The input string to truncate.
@@ -26,17 +25,16 @@ function isStringEmpty(text) {
  * truncateString('Hello World', 2); => 'He'
  */
 function truncateString(inputText, numberOfCharacters) {
-  if (typeof inputText !== 'string' || inputText.length === 0) {
-    throw new Error('Input text must have at least one character');
+  if (typeof inputText !== "string" || inputText.length === 0) {
+    throw new Error("Input text must have at least one character");
   }
 
-  if (typeof numberOfCharacters !== 'number') {
-    throw new Error('Please specify number of characters to extract');
+  if (typeof numberOfCharacters !== "number") {
+    throw new Error("Please specify number of characters to extract");
   }
 
   return inputText.substring(0, numberOfCharacters);
 }
-
 
 /**
  * Creates a social media post hashtag from the given text.
@@ -45,12 +43,10 @@ function truncateString(inputText, numberOfCharacters) {
  * @throws {Error} - Throws an error if the text has fewer than three characters or is invalid.
  */
 function createHashTag(text) {
-  // Validate input
   if (typeof text !== "string" || text.trim().length < 3) {
     throw new Error("Text should have at least three characters");
   }
 
-  // Generate camelCase hashtag
   return (
     "#" +
     text
@@ -64,10 +60,9 @@ function createHashTag(text) {
   );
 }
 
-
 /**
  * Write a function to format phone number as '+998 99 777 66 55'
- * @param {number} phoneNumber
+ * @param {number|string} phoneNumber
  * @returns {string}
  * @throws {Error} 'Phone number must be either 9 or 12 characters long'
  * @example
@@ -78,7 +73,10 @@ function createHashTag(text) {
  * formatPhoneNumber(); => throws error "Phone number must be either 9 or 12 characters long"
  */
 function formatPhoneNumber(phoneNumber) {
-  if (typeof phoneNumber !== "number" || phoneNumber === null || phoneNumber === undefined) {
+  if (
+    !phoneNumber ||
+    (typeof phoneNumber !== "number" && typeof phoneNumber !== "string")
+  ) {
     throw new Error("Phone number must be either 9 or 12 characters long");
   }
 
@@ -86,17 +84,11 @@ function formatPhoneNumber(phoneNumber) {
   const phoneNumberLength = phoneNumberString.length;
 
   if (phoneNumberLength === 9) {
-    if (phoneNumberString[0] === '0') {
-      throw new Error("Phone number must be either 9 or 12 characters long");
-    }
     return `+998 ${phoneNumberString.slice(0, 2)} ${phoneNumberString.slice(
       2,
       5
     )} ${phoneNumberString.slice(5, 7)} ${phoneNumberString.slice(7)}`;
   } else if (phoneNumberLength === 12) {
-    if (phoneNumberString[0] === '0') {
-      throw new Error("Phone number must be either 9 or 12 characters long");
-    }
     return `+${phoneNumberString.slice(0, 3)} ${phoneNumberString.slice(
       3,
       5
@@ -120,7 +112,12 @@ function formatPhoneNumber(phoneNumber) {
  * changeTextCase('Hello World', 'snake'); => 'hello_world'
  */
 function changeTextCase(inputText, caseType) {
+  if (typeof inputText !== "string") {
+    throw new Error("Input text must be a string");
+  }
+
   const words = inputText.toLowerCase().split(" ");
+
   if (caseType === "camel") {
     return (
       words[0] +
@@ -153,6 +150,13 @@ function changeTextCase(inputText, caseType) {
  * 'Winnie-the-Puff is a fictional anthropomorphic teddy bear created by English author A. A. Milne and English illustrator E. H. Shepard.'
  */
 function replaceWordInText(text, wordToReplace, replacementWord) {
+  if (
+    typeof text !== "string" ||
+    typeof wordToReplace !== "string" ||
+    typeof replacementWord !== "string"
+  ) {
+    throw new Error("All arguments must be strings");
+  }
   return text.replace(new RegExp(wordToReplace, "g"), replacementWord);
 }
 
@@ -166,6 +170,9 @@ function replaceWordInText(text, wordToReplace, replacementWord) {
  * extractPriceFromText('There were no apples left in the shop'); => 'No matching price was found'
  */
 function extractPriceFromText(text) {
+  if (typeof text !== "string") {
+    throw new Error("Input must be a string");
+  }
   const priceRegex = /\$(\d+(?:\.\d+)?)/;
   const match = text.match(priceRegex);
   return match ? Number.parseFloat(match[1]) : "No matching price was found";
