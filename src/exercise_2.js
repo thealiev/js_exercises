@@ -1,20 +1,18 @@
 /**
- * Counts the number of matchsticks used for the houses.
- * @param {number} numberOfHouses
- * @returns {number}
- * @throws {Error} - Throws an error if numberOfHouses is not a non-negative integer.
+ * Calculates the number of matchsticks used for the houses.
+ * @param {number} step - The house number.
+ * @returns {number} The total number of matchsticks used.
  * @example
  * countMatchsticksInHouses(1) => 6
  * countMatchsticksInHouses(2) => 11
  * countMatchsticksInHouses(4) => 21
  * countMatchsticksInHouses(0) => 0
- */
-function countMatchsticksInHouses(numberOfHouses) {
-  if (!Number.isInteger(numberOfHouses) || numberOfHouses < 0) {
-    throw new Error("numberOfHouses must be a non-negative integer");
-  }
-  return numberOfHouses === 0 ? 0 : numberOfHouses * 5 + 1;
+ * See image here: https://edabit-challenges.s3.amazonaws.com/matchstick_houses.png
+ * */
+function countMatchsticksInHouses(step) {
+  return step ? 5 * step + 1 : 0;
 }
+
 
 /* The time has a format: hours:minutes. Both hours and minutes have two digits, like 09:00. */
 /* Make a regexp to find time in the string: Breakfast at 09:00 in the room 123:456. */
@@ -23,19 +21,19 @@ function countMatchsticksInHouses(numberOfHouses) {
 const TIME_REGEX = /\b\d{2}:\d{2}\b/;
 
 /**
- * Finds a secret word in a string of uppercase letters.
- * @param {string} text - The string to search.
- * @returns {string} - The secret word.
- * @throws {Error} - Throws an error if text is not a string.
+ * @param {String} text
+ * @returns {String}
  * @example
- * findSecretWord("UcUNFYGaFYFYGtNUH") => "cat"
- * findSecretWord("bEEFGBuFBRrHgUHlNFYaYr") => "burglar"
- * findSecretWord("YFemHUFBbezFBYzFBYLleGBYEFGBMENTment") => "embezzlement"
- */
+ * A word is on the loose and now has tried to hide amongst a crowd of tall letters!
+ * Help write a function to detect what the word is, knowing the following rules:
+ * The wanted word is in lowercase.
+ * The crowd of letters is all in uppercase.
+ * Note that the word will be spread out amongst the random letters, but their letters remain in the same order.
+ * findSecretWord("UcUNFYGaFYFYGtNUH") ➞ "cat"
+ * findSecretWord("bEEFGBuFBRrHgUHlNFYaYr") ➞ "burglar"
+ * findSecretWord("YFemHUFBbezFBYzFBYLleGBYEFGBMENTment") ➞ "embezzlement"
+ * */
 function findSecretWord(text) {
-  if (typeof text !== "string") {
-    throw new Error("Input must be a string");
-  }
   return text.replace(/[A-Z]/g, "");
 }
 
@@ -44,68 +42,59 @@ function findSecretWord(text) {
  * Given the instances p1, p2 and p3, which will be initialised with the attributes name and age,
  * return a sentence in the following format:
  * {other person name} is {older than / younger than / the same age as} me.
- */
+ * */
 class Person {
   /**
-   * @param {string} name
-   * @param {number} age
-   */
+   * @param {String} name
+   * @param {Number} age
+   * */
   constructor(name, age) {
-    if (typeof name !== "string" || typeof age !== "number") {
-      throw new Error("Invalid arguments for Person constructor");
-    }
     this.name = name;
     this.age = age;
   }
 
   /**
-   * Compares the age of another person with this person.
-   * @param {Person} other
-   * @returns {string}
-   * @throws {Error} Throws an error if the 'other' object or its 'name' and 'age' properties are not defined.
-   */
+   * @param {Object} other
+   * @param {String} other.name
+   * @param {Number} other.age
+   * @returns {String}
+   * @example
+   * p1 = new Person("Samuel", 24)
+   * p2 = new Person("Joel", 36)
+   * p3 = new Person("Lily", 24)
+   * p1.compareAge(p2) ➞ "Joel is older than me."
+   * p2.compareAge(p1) ➞ "Samuel is younger than me."
+   * p1.compareAge(p3) ➞ "Lily is the same age as me."
+   * */
   compareAge(other) {
-    if (
-      !other ||
-      typeof other.name !== "string" ||
-      typeof other.age !== "number"
-    ) {
-      throw new Error(
-        "Invalid 'other' object: must have 'name' (string) and 'age' (number) properties."
-      );
-    }
-
     const comparison =
-      this.age < other.age
-        ? "older"
-        : this.age > other.age
-        ? "younger"
+      this.age > other.age
+        ? "younger than"
+        : this.age < other.age
+        ? "older than"
         : "the same age as";
-    return `${other.name} is ${comparison} than me.`;
+
+    return `${other.name} is ${comparison} me.`;
   }
 }
 
 /**
- * Returns a function that returns the provided string `input`.
- * @param {string} input
+ * Write a function redundant that takes in a string `str` and returns a function that returns `str`.
+ * @param {String} str
  * @returns {Function}
- * @throws {Error} - Throws an error if input is not a string.
  * @example
- * const f1 = redundant("apple");
- * f1(); // ➞ "apple"
+ * const f1 = redundant("apple")
+ * f1() ➞ "apple"
  *
- * const f2 = redundant("pear");
- * f2(); // ➞ "pear"
+ * const f2 = redundant("pear")
+ * f2() ➞ "pear"
  *
- * const f3 = redundant("");
- * f3(); // ➞ ""
- */
-function redundant(input) {
-  if (typeof input !== "string") {
-    throw new Error("Input must be a string");
-  }
+ * const f3 = redundant("")
+ * f3() ➞ ""
+ * */
+function redundant(str) {
   return function () {
-    return input;
+    return str;
   };
 }
 
